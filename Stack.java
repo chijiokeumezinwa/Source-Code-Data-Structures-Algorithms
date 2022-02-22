@@ -4,7 +4,7 @@
  * 
  */
 
-package DataStructuresAlgorithms;
+package DataStructuresAlgorithmsSourceCode;
 
 public class Stack<T> implements Iterable<T>{
 	private SinglyLinkedList<T> list= new SinglyLinkedList<T>();

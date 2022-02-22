@@ -4,7 +4,7 @@
 * @author Chijioke Umezinwa
 */
 
-package DataStructuresAlgorithms;
+package DataStructuresAlgorithmsSourceCode;
 
 public class SinglyLinkedList<T> implements Iterable<T> {
 	private int size = 0;
