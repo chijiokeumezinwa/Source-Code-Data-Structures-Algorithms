@@ -134,7 +134,7 @@ public class SinglyLinkedList<T> implements Iterable<T> {
 			return temp.data;
 		}
 	}
-
+	
 	public T removeAt(int index){
 		if(index<0 || index>=size)
 			throw new IllegalArgumentException();

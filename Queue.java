@@ -45,7 +45,7 @@ public class Queue<T> implements Iterable<T>{
     // Return an iterator to alow the user to traverse
     // through the elements found inside the queue
     @Override
-        public java.util.Iterator<T> iterator() {
+    public java.util.Iterator<T> iterator() {
         return list.iterator();
     }
 }
