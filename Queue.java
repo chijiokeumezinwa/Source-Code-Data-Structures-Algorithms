@@ -9,8 +9,8 @@ package DataStructuresAlgorithmsSourceCode;
 public class Queue<T> implements Iterable<T>{
     private SinglyLinkedList<T> list = new SinglyLinkedList<T>();
 
-    public LinkedQueue() {}
-    public LinkedQueue(T firstElem) {
+    public Queue() {}
+    public Queue(T firstElem) {
         offer(firstElem);
     }
     // Return the size of the queue
