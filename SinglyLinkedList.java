@@ -153,6 +153,13 @@ public class SinglyLinkedList<T> implements Iterable<T> {
 		}
 	}
 
+	public int remove(Object obj){
+		int index=indexOf(obj);
+		if(index==-1)
+			throw new RuntimeException("Object not in list");
+		return removeAt(index);
+	}
+
 	public boolean contains(Object obj){
 		return indexOf(obj) != -1;
 	}

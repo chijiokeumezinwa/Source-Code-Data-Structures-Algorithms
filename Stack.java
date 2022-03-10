@@ -11,7 +11,7 @@ public class Stack<T> implements Iterable<T>{
 
 	public Stack(){}
 
-	public Stack(int firstElem){
+	public Stack(T firstElem){
 		push(firstElem);
 	}
 
