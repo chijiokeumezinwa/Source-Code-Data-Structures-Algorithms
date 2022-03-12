@@ -602,7 +602,63 @@ public class DoublyLinkedList<Item> implements Iterable<Item>{
 
 	//get
 	public Item get(int index){
-		
+		if(index<0 || index>=size)
+			throw new IllegalArgumentException();
+		else if(index==0)
+			return peekFirst();
+		else if(index==size-1)
+			return peekLast();
+		else{
+			Node<Item> trav=head;
+			for(int i=1; i<index; i++)
+				trav=trav.next;
+			Node<Item> temp=trav.next;
+			return temp.data;
+		}
+	}
+
+	//Iterator
+	@Override
+	public java.util.Iterator<Item> iterator(){
+		return new LinkedListIterator();
+	}
+
+	public class LinkedListIterator implements java.util.Iterator<Item>{
+		private Node<Item> current =head;
+
+		@Override
+		public boolean hasNext(){
+			return (current!=null);
+		}
+
+		@Override
+		public Item next(){
+			Item item = current.data;
+			current=current.next;
+			return item;
+		}
+
+		@Override
+		public void remove(){
+			throw new UnsupportedOperationException();
+		}
+	}
+
+	@Override
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		sb.append("[ ");
+		Node<T> trav = head;
+		while(trav != null){
+			sb.append(trav.data);
+			if(trav.next != null)
+				sb.append(", ");
+			trav=trav.next;
+		}
+
+		sb.append(" ]");
+		return sb.toString();
+
 	}
 
 }
