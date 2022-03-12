@@ -1,25 +1,129 @@
 //Test
-//Singly Linked List
 
-public class SinglyLinkedList{
-	//size, head, and tail
-	private int size= 0;
-	private Node head=null;
-	private Node tail=null;
+//Let's try the generic item implementation of a stack
 
-	//Next we need to define the node class
-	private static class Node{
-		//data and next
-		private int data;
-		private Node next;
+public class Stack<Item> implements Iterable<Item>{
+	//lets use the linked list to implement our stack
+	private SinglyLinkedList<Item> list = new SinglyLinkedList<Item> ();
 
-		public Node(int data){
+	public Stack(){}
+
+	public Stack(Item firstElem){
+		push(firstElem);
+	}
+
+	public int size(){
+		return list.size();
+	}
+
+	public boolean isEmpty(){
+		return size()==0;
+	}
+
+	public void push(Item elem){
+		list.addLast(elem);
+	}
+
+	public Item pop(){
+		if(isEmpty())
+			throw new java.util.EmptyStackException();
+		return list.removeLast(elem);
+	}
+
+	public Item peek(){
+		if(isEmpty())
+			throw new java.util.EmptyStackException();
+		return list.peekLast();
+	}
+
+	public int search(Item elem){
+		return list.lastIndexOf(elem);
+	}
+
+	//Iterator
+	//how to use?
+	//Stack <Item> stack = new Stack<>();
+	//Iterator iter = stack.iterator();
+	//while(iter.hasNext())
+	//	System.out.println(iter.next());
+	@Override
+	public java.util.Iterator<Item> iterator(){
+		return list.iterator();
+	}
+}
+
+//ok lets now implement a queue the same way
+public class Queue <Item> implements Iterable<Item>{
+	//we'll implement the queue with a Linked List
+	private SinglyLinkedList<Item> list = new SinglyLinkedList<Item>();
+
+	public Queue(){}
+
+	public Queue(Item firstElem){
+		offer(firstElem);
+	}
+
+	public int size(){
+		return list.size();
+	}
+
+	public boolean isEmpty(){
+		return size()==0;
+	}
+
+	public void offer(Item elem){
+		if(isEmpty())
+			throw new RuntimeException("Queue Empty");
+		list.addLast(elem);
+	}
+
+	public Item poll(){
+		if(isEmpty())
+			throw new RuntimeException("Queue Empty");
+		return list.removeFirst();
+	}
+
+	public Item peek(){
+		if(isEmpty())
+			throw new RuntimeException("Queue Empty");
+		return list.peekFirst();
+	}
+
+	public int search(Item elem){
+		return list.lastIndexOf(elem);
+	}
+
+	//Iterator
+	//How to use?
+	//Queue <Item> queue = new Queue<Item>();
+	//Iterator iter = queue.iterator();
+	//while(iter.hasNext())
+	//		System.out.print(iter.next()+ " ");
+	@Override
+	public java.util.Iterator<Item> iterator(){
+		return list.iterator();
+	}
+}
+
+//now lets try to implement a singly linked list
+public class SinglyLinkedList <Item> implements Iterable<Item>{
+	//size, nodes head and tail
+	private int size=0;
+	private Node<Item>head=null;
+	private Node<Item>tail=null;
+
+	//Node class
+	private static class Node<Item>{
+		//Data, and Node next
+		private Item data;
+		private Node<Item>next;
+
+		public Node(Item data){
 			this.data=data;
 			next=null;
 		}
 	}
 
-	//next lets define the size, is empty methods
 	public int size(){
 		return size;
 	}
@@ -28,49 +132,49 @@ public class SinglyLinkedList{
 		return size()==0;
 	}
 
-	//next lets define the clear method
 	public void clear(){
-		Node trav= head;//start at head
-		while(trav!=null){//while the node is not null
-			Node next=trav.next;//store the next node of trav
+		Node<Item> trav=head;
+
+		while(trav!=null){
+			Node<Item> next = trav.next;
 			trav.data=null;
-			trav.next=null;//nullify both aspects of the node
-			trav=next;//move on to the next node
+			trav.next=null;
+			trav=next;
 		}
-		head=tail=trav=null;//nullify the remaining nodes
-		size=0;//reset size to zero
+		head=tail=trav=null;
+		size=0;
 	}
 
-	//next lets define the add method
-	public void add(int elem){
+	//add
+	public void add(Item elem){
 		addLast(elem);
 	}
 
-	//lets define the addlast method
-	public void addLast(int elem){
+	//addLast
+	public void addLast(Item elem){
 		if(isEmpty())
-			head=tail=new Node(elem);//make head and tail equal to a new node with elem stored
+			head=tail=new Node<Item>(elem);
 		else{
-			tail.next=new Node(elem);//attach a new node with elem stored
-			tail = tail.next;
-		}
-		size++;//increase the size at the end
-	}
-
-	//lets define the addfirst method
-	public void addFirst(int elem){
-		if(isEmpty())
-			head=tail=new Node(elem);//make head and tail equal to a new node with elem stored
-		else{
-			Node newNode= new Node(elem);//make a new node with elem stored
-			newNode.next=head;//make this new node's next node head
-			head=newNode;//make head equal to newNode 
+			tail.next=new Node<Item>(elem);
+			tail=tail.next;
 		}
 		size++;
 	}
 
-	//lets define the addAt method
-	public void addAt(int index, int elem){
+	//addFirst
+	public void addFirst(Item elem){
+		if(isEmpty())
+			head=tail=new Node<Item>(elem);
+		else{
+			Node<Item> newNode=new Node<>(elem);
+			newNode.next=head;
+			head=newNode;
+		}
+		size++;
+	}
+
+	//addAt
+	public void addAt(int index, Item elem){
 		if(index<0 || index>size)
 			throw new IllegalArgumentException();
 		else if(index==0)
@@ -78,68 +182,70 @@ public class SinglyLinkedList{
 		else if(index==size)
 			addLast(elem);
 		else{
-			Node current = head;//start at the head
+			Node<Item> current=head;
 			for(int i = 1; i<index; i++)
-				current=current.next;//travel to desired index
-			Node temp = current.next;//store the node at desired index
-			current.next=new Node(elem);//make the new node at desired index
-			(current.next).next=temp;//attach the node that was stored in temp to new node.
-			size++;//increase the size
+				current=current.next;
+			Node<Item> temp = current.next;
+			current.next=new Node<Item>(elem);
+			(current.next).next=temp;
+			size++;
 		}
 	}
 
-	//lets define the peekFirst method
-	public int peekFirst(){
-		if(isEmpty())
-			throw new RuntimeException("Empty List");//if its empty throw exception
-		return head.data;//return data of head
-	}
-
-	//lets define the peekLast method
-	public int peekLast(){
-		if(isEmpty())
-			throw new RuntimeException("Empty List");//if empty throw exception
-		return tail.data;//return data of tail
-	}
-
-	//lets define the removeLast method
-	public int removeLast(){
+	//peekFirst
+	public Item peekFirst(){
 		if(isEmpty())
 			throw new RuntimeException("Empty List");
+		return head.data;
+	}
+
+	//peekLast
+	public Item peekLast(){
+		if(isEmpty())
+			throw new RuntimeException("Empty List");
+		return tail.data;
+	}
+
+	//remove Last
+	public Item removeLast(){
+		if(isEmpty())
+			throw new RuntimeException("Empty List");
+
 		else if(size==1){
-			Node temp=head;//collect the only node
-			head=tail=null;//nullify the head and tail
-			size=0;//reset size
-			return temp.data;//return data of the only node
+			Node<Item> temp = head;
+			head=tail=null;
+			size=0;
+			return temp.data;
 		}
+
 		else{
-			Node previous = head;//start at head
-			for(int i=0; i<size-2;i++)
-				previous = previous.next;//travel through list until the node before tail
-			Node temp= tail;//store tail in temp
-			tail=previous;//make tail equal to previous aka the node before tail
-			tail.next=null;//make tail's next node null
-			size--;//decrease size by one
-			return temp.data;//return data of the former tail node
+			Node<Item> current=head;
+			for(int i = 0;i<size-2;i++)
+				current=current.next;
+			Node<Item> temp=tail;
+			tail=current;
+			tail.next=null;
+			size--;
+			return temp.data;
 		}
 	}
 
-	//lets define the removeFirst method
-	public int removeFirst(){
+	//removeFirst
+	public Item removeFirst(){
 		if(isEmpty())
 			throw new RuntimeException("Empty List");
 		else{
-			Node temp = head;//store head in temp node
-			head=head.next;//push head to next node
+			Node<Item> temp =head;
+			head=head.next;
+			size--;
 			if(head==null)
-				tail=null;//if head is now null make tail null as well
-			size--;//decrease size
-			return temp.data;//return data of former head node
+				tail=null;
+			return temp.data;
 		}
 	}
 
-	//lets define the removeAt method
-	public int removeAt(int index){
+	//remove At
+	public Item removeAt(int index){
 		if(index<0 || index>=size)
 			throw new IllegalArgumentException();
 		else if(index==0)
@@ -147,84 +253,64 @@ public class SinglyLinkedList{
 		else if(index==size-1)
 			return removeLast();
 		else{
-			//need help with this
-			Node previous=head;//so i start at head
+			Node<Item> previous=head;
 			for(int i = 1; i<index;i++)
-				previous=previous.next;//keep going until just before desired index
-			Node current= previous.next;//store node at desired index
-			previous.next=current.next;//make the node just before desired index point
-			//to the next node of the node at desired node. this skips the node at desired index.
-			size--;//decrease size
-			return current.data;//return the data of the deleted node.
+				previous=previous.next;
+			Node<Item> temp= previous.next;
+			previous.next=temp.next;
+			size--;
+			return temp.data;
 		}
 	}
-
-	//lets define the remove method
-	public int remove(Object obj){
-		int index=indexOf(obj);
-		if(index==-1)
+	//removes method
+	public Item remove(Object obj){
+		//see if obj is in list
+		if(!contains(obj))
 			throw new RuntimeException("Object not in list");
+		int index=indexOf(obj);
 		return removeAt(index);
 	}
-	//Remaining methods? Get, Set,index of, lastIndexOf, contains, traversal
 
-	//lets define the contains method
+	//contains method
 	public boolean contains(Object obj){
-		return indexOf(obj) != -1;//if -1, the list doesnt contain object
+		return indexOf(obj) != -1;
 	}
 
-	//lets define the indexOf method
+	//indexOf 
 	public int indexOf(Object obj){
-		int index=0;//start at index 0-index keeps track of the place in list
-		Node trav=head;//start at head
+		int index=0;//start at beginning of list
+		Node<Item> trav=head;
 
-		if(obj==null){//if the desired object has value of null
+		if(obj == null){
 			for(;trav!=null;trav=trav.next,index++){
 				if(trav.data==null)
-					return index;//return index at which there is a null value
+					return index;
 			}
 		}
 		else{
 			for(;trav!=null;trav=trav.next,index++){
 				if(obj.equals(trav.data))
-					return index;//return index where desired object is
+					return index;
 			}
 		}
-		return -1;//desired object doesnt exist
+		return -1;
 	}
 
-	//lets define the lastIndexOf method
-	public int lastIndexOf(int elem){
-		int index=0;//start at 0-this records place in list
-		int lastSavedIndex=-1;//this stores the last known index of desired element
-		Node trav=head;//start at beginning of list
+	//lastIndexOf
+	public int lastIndexOf(Item elem){
+		int index=0;
+		int lastSavedIndex=-1;
+		Node<Item> trav=head;
 
 		for(;trav!=null;trav=trav.next,index++){
-			if(trav.data==elem)
-				lastSavedIndex=index;//record the last known index of desired element
+			if(trav.data == elem)
+				lastSavedIndex=index;
 		}
-		return lastSavedIndex;//return result
+		return lastSavedIndex;
 	}
 
-	//lets define the get method
-	public int get(int index){
-		if(index<0 || index>=size)
-			throw new IllegalArgumentException();
-		else if(index==0)
-			return peekFirst();
-		else if(index==size-1)
-			return peekLast();
-		else{
-			Node trav=head;
-			for(int i=1; i<index;i++)
-				trav=trav.next;
-			Node current=trav.next;
-			return current.data;
-		}
-	}
-
-	//lets define the set method
-	public int set(int index, int elem){
+	//set method
+	public int set(int index, Item elem){
 		if(index<0 || index>=size)
 			throw new IllegalArgumentException();
 		else if(index==0){
@@ -243,10 +329,280 @@ public class SinglyLinkedList{
 			return data;
 		}
 	}
+
+	//get method
+	public int get(int index){
+		if(index<0 || index>=size)
+			throw new IllegalArgumentException();
+		else if(index==0){
+			return peekFirst();
+		}
+		else if(index==size-1){
+			return peekLast();
+		}
+		else{
+			Node<Item> trav=head;
+			for(int i =1; i<index;i++)
+				trav=trav.next;
+			Node<Item>temp=trav.next;
+			return temp.data;
+		}
+	}
+
+	//Iterator
+	@Override
+	public java.util.Iterator<Item> iterator(){
+		return new LinkedListIterator();
+	}
+
+	private class LinkedListIterator implements java.util.Iterator<Item>{
+		private Node<Item> current=head;
+
+		@Override
+		public boolean hasNext(){
+			return (current != null);
+		}
+
+		@Override
+		public Item next(){
+			Item item = current.data;
+			current=current.next;
+			return item;
+		}
+
+		@Override
+		public void remove(){
+			throw new UnsupportedOperationException();
+		}
+	}
 }
 
-//Doubly Linked List
-public class DoublyLinkedList{
-	//attributes? size,head,tail
+//lets try to do a doubly linked list
+public class DoublyLinkedList<Item> implements Iterable<Item>{
+	//size, Node head and tail
+	private int size=0;
+	private Node<Item> head=null;
+	private Node<Item> tail=null;
+
+	private static class Node<Item>{
+		//data, Node prev and next
+		private Item data;
+		private Node<Item> prev;
+		private Node<Item> next;
+
+		public Node(Item data, Node<Item> prev, Node<Item>next){
+			this.data=data;
+			this.prev=prev;
+			this.next=next;
+		}
+
+		@Override
+		public String toString(){
+			return data.toString();
+		}
+	}
+
+	public int size(){
+		return size;
+	}
+
+	public boolean isEmpty(){
+		return size()==0;
+	}
+
+	public void clear(){
+		Node<Item> trav=head;
+		while(trav != null){
+			Node<Item> next=trav.next;
+			trav.data=trav.prev=trav.next=null;
+			trav=next;
+		}
+		head=tail=trav=null;
+		size=0;
+	}
+
+	//add
+	public void add(Item elem){
+		addLast(elem);
+	}
+
+	//addLast
+	public void addLast(Item elem){
+		if(isEmpty())
+			head=tail=new Node<Item>(elem,null,null);
+		else{
+			tail.next=new Node<Item>(elem,tail,null);
+			tail=tail.next;
+		}
+		size++;
+	}
+
+	//addFirst
+	public void addFirst(Item elem){
+		if(isEmpty())
+			head=tail=new Node<Item>(elem,null,null);
+		else{
+			Node<Item> newNode = new Node<>(elem,null,head);
+			head.prev=newNode;
+			head=head.prev;
+		}
+		size++;
+	}
+
+	//addat
+	public void addAt(int index, Item elem){
+		if(index<0 || index>size)
+			throw new IllegalArgumentException();
+
+		else if(index==0)
+			addFirst(elem);
+
+		else if(index==size)
+			addLast(elem);
+
+		else{
+			Node<Item> trav=head;
+			for(int i=1; i<index;i++)
+				trav=trav.next;
+			Node<Item> newNode = new Node<>(elem, trav, trav.next);
+			trav.next.prev=newNode;
+			trav.next=newNode;
+
+			size++;
+		}
+	}
+
+	//peekfirst
+	public Item peekFirst(){
+		if(isEmpty())
+			throw new RuntimeException("Empty List");
+		return head.data;
+	}
+
+	public Item peekLast(){
+		if(isEmpty())
+			throw new RuntimeException("Empty List");
+		return tail.data;
+	}
+
+	public Item removeLast(){
+		if(isEmpty())
+			throw new RuntimeException("Empty List");
+		else if(size==1){
+			Node<Item> temp=head;
+			head=tail=null;
+			size=0;
+			return temp.data;
+		}
+		else{
+			Node<Item> temp=tail;
+			tail=tail.prev;
+			tail.next=null;
+			return temp.data;
+		}
+	}
+
+	public Item removeFirst(){
+		if(isEmpty())
+			throw new RuntimeException("Empty List");
+		else{
+			Node<Item> temp = head;
+			head=head.next;
+			size--;
+			if(head==null)
+				tail=null;
+			head.prev=null;
+			return temp.data;
+		}
+	}
+
+	public Item removeAt(int index){
+		if(index<0 || index>=size)
+			throw new IllegalArgumentException();
+		else if(index==0)
+			return removeFirst();
+		else if(index==size-1)
+			return removeLast();
+		else{
+			Node<Item> trav = head;
+			for(int i=1; i<index; i++)
+				trav=trav.next;
+			Node<Item> temp= trav.next;
+			trav.next=temp.next;
+			trav.next.prev=trav;
+
+			temp.prev=null;
+			temp.next=null;
+			size--;
+			return temp.data;
+		}
+	}
+
+	public Item remove(Object obj){
+		if(!contains(obj))
+			throw new RuntimeException("Object is not in list");
+		int index=indexOf(obj);
+		return removeAt(index);
+	}
+
+	public boolean contains(Object obj){
+		return indexOf(obj) != -1;
+	}
+
+	public int indexOf(Object obj){
+		int index=0;
+		Node<Item> trav=head;
+
+		if(obj==null){
+			for(;trav!=null;trav=trav.next,index++){
+				if(trav.data==null)
+					return index;
+			}
+		}
+		else{
+			for(;trav!=null;trav=trav.next,index++)
+				if(obj.equals(trav.data))
+					return index;
+		}
+		return -1;
+	}
+
+	public int lastIndexOf(Item elem){
+		int index=0;
+		int lastSavedIndex=-1;
+		Node<Index> trav=head;
+
+		for(;trav!=null;trav=trav.next,index++){
+			if(trav.data==elem)
+				lastSavedIndex=index;
+		}
+		return lastSavedIndex;
+	}
+
+	//set method
+	public Item set(int index, Item elem){
+		if(index<0 || index>=size)
+			throw new IllegalArgumentException();
+		else if(index==0){
+			Item data= removeFirst();
+			addFirst(elem);
+			return data;
+		}
+		else if(index==size-1){
+			Item data=removeLast();
+			addLast(elem);
+			return data;
+		}
+		else{
+			Item data=removeAt(index);
+			addAt(index,elem);
+			return data;
+		}
+	}
+
+	//get
+	public Item get(int index){
+		
+	}
 
 }

@@ -43,6 +43,15 @@ public class Stack<T> implements Iterable<T>{
 		return list.lastIndexOf(elem);
 	}
 
+
+	/**
+	 * How to use iterator? 
+	 * Stack < t > stack = ...;
+	 * Iterator< t > iter = list.iterator();
+	 * while(iter.hasNext())
+	 * 		System.out.println(iter.next());
+	 * 	
+	 */
 	@Override
 	public java.util.Iterator<T> iterator(){
 		return list.iterator();

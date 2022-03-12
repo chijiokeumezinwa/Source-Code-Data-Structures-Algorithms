@@ -1,5 +1,5 @@
 /**
- * A Binary Heap implementaiotn of a min priority queue in java
+ * A Binary Min Heap implementation of a priority queue in java
  * 
  * @author Chijioke Umezinwa
  */
@@ -7,8 +7,9 @@
 package DataStructuresAlgorithmsSourceCode;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Collection;
+
 
 public class PriorityQueueBinaryHeap<T extends Comparable<T>>{
 	private List<T> heap = null;

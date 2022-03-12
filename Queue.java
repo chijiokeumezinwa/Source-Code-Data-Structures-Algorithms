@@ -23,27 +23,42 @@ public class Queue<T> implements Iterable<T>{
         return size() == 0;
     }
 
-    // Peek the element at the front of the queue
-    // The method throws an error is the queue is empty
-    public T peek() {
-        if (isEmpty()) throw new RuntimeException("Queue Empty");
-        return list.peekFirst();
-    }
-
-    // Poll an element from the front of the queue
-    // The method throws an error is the queue is empty
-    public T poll() {
-        if (isEmpty()) throw new RuntimeException("Queue Empty");
-        return list.removeFirst();
-    }
-
     // Add an element to the back of the queue
     public void offer(T elem) {
         list.addLast(elem);
     }
 
+    // Poll an element from the front of the queue
+    // The method throws an error is the queue is empty
+    public T poll() {
+        if (isEmpty())
+            throw new RuntimeException("Queue Empty");
+        return list.removeFirst();
+    }
+
+    // Peek the element at the front of the queue
+    // The method throws an error is the queue is empty
+    public T peek() {
+        if (isEmpty())
+            throw new RuntimeException("Queue Empty");
+        return list.peekFirst();
+    }
+
+    public int search(Item elem){
+        return list.lastIndexOf(elem);
+    }
+    
     // Return an iterator to alow the user to traverse
     // through the elements found inside the queue
+
+    /**
+     * How to use iterator? 
+     * SinglyLinkedList < t > list = ...;
+     * Iterator< t > iter = list.iterator();
+     * while(iter.hasNext())
+     *      System.out.print(iter.next()+" -> ");
+     *  
+     */
     @Override
     public java.util.Iterator<T> iterator() {
         return list.iterator();

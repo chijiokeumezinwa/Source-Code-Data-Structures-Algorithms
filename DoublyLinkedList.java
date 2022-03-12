@@ -138,23 +138,37 @@ public class DoublyLinkedList<T> implements Iterable<T> {
 
   // Remove the last value at the tail of the linked list, O(1)
   public T removeLast() {
-    // Can't remove data from an empty list
-    if (isEmpty()) throw new RuntimeException("Empty list");
+    // // Can't remove data from an empty list
+    // if (isEmpty()) throw new RuntimeException("Empty list");
 
-    // Extract the data at the tail and move
-    // the tail pointer backwards one node
-    T data = tail.data;
-    tail = tail.prev;
-    --size;
+    // // Extract the data at the tail and move
+    // // the tail pointer backwards one node
+    // T data = tail.data;
+    // tail = tail.prev;
+    // --size;
 
-    // If the list is now empty set the head to null
-    if (isEmpty()) head = null;
+    // // If the list is now empty set the head to null
+    // if (isEmpty()) head = null;
 
-    // Do a memory clean of the node that was just removed
-    else tail.next = null;
+    // // Do a memory clean of the node that was just removed
+    // else tail.next = null;
 
-    // Return the data that was in the last node we just removed
-    return data;
+    // // Return the data that was in the last node we just removed
+    // return data;
+    if(isEmpty())
+      throw new RuntimeException("Empty List");
+    else if(size==1){
+      Node<Item> temp=head;
+      head=tail=null;
+      size=0;
+      return temp.data;
+    }
+    else{
+      Node<Item> temp=tail;
+      tail=tail.prev;
+      tail.next=null;
+      return temp.data;
+    }
   }
 
   // Remove an arbitrary node from the linked list, O(1)
@@ -257,29 +271,62 @@ public class DoublyLinkedList<T> implements Iterable<T> {
     return indexOf(obj) != -1;
   }
 
+  /**
+   * How to use iterator? 
+   * DoublyLinkedList < t > list = ...;
+   * Iterator< t > iter = list.iterator();
+   * while(iter.hasNext())
+   *    System.out.print(iter.next()+" -> ");
+   *  
+   */
+  // @Override
+  // public java.util.Iterator<T> iterator() {
+  //   return new java.util.Iterator<T>() {
+  //     private Node<T> trav = head;
+
+  //     @Override
+  //     public boolean hasNext() {
+  //       return trav != null;
+  //     }
+
+  //     @Override
+  //     public T next() {
+  //       T data = trav.data;
+  //       trav = trav.next;
+  //       return data;
+  //     }
+
+  //     @Override
+  //     public void remove() {
+  //       throw new UnsupportedOperationException();
+  //     }
+  //   };
+  // }
   @Override
   public java.util.Iterator<T> iterator() {
-    return new java.util.Iterator<T>() {
-      private Node<T> trav = head;
-
-      @Override
-      public boolean hasNext() {
-        return trav != null;
-      }
-
-      @Override
-      public T next() {
-        T data = trav.data;
-        trav = trav.next;
-        return data;
-      }
-
-      @Override
-      public void remove() {
-        throw new UnsupportedOperationException();
-      }
-    };
+    return new LinkedListIterator();
   }
+  
+  private class LinkedListIterator implements java.util.Iterator<T>{
+    private Node <T> current = head;
+
+    @Override
+    public boolean hasNext(){
+      return (current != null);
+    }
+
+    @Override
+    public T next(){
+      T t = current.data;
+      current=current.next;
+      return e;
+    }
+
+    @Override
+    public void remove(){
+      throw new UnsupportedOperationException();
+    }
+  } 
 
   @Override
   public String toString() {

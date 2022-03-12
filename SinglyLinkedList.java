@@ -20,9 +20,9 @@ public class SinglyLinkedList<T> implements Iterable<T> {
 		}
 
 		@Override
-	    public String toString() {
-	      return data.toString();
-	    }
+		public String toString() {
+			return data.toString();
+		}
 	}
 
 	public void clear() {
@@ -154,10 +154,11 @@ public class SinglyLinkedList<T> implements Iterable<T> {
 	}
 
 	public int remove(Object obj){
-		int index=indexOf(obj);
-		if(index==-1)
+		//see if obj is in list
+		if(!contains(obj))
 			throw new RuntimeException("Object not in list");
-		return removeAt(index);
+		int index=indexOf(obj);
+		return removeAt(index);	
 	}
 
 	public boolean contains(Object obj){
@@ -244,13 +245,21 @@ public class SinglyLinkedList<T> implements Iterable<T> {
 
 	}
 
+	/**
+	 * How to use iterator? 
+	 * SinglyLinkedList < t > list = ...;
+	 * Iterator< t > iter = list.iterator();
+	 * while(iter.hasNext())
+	 * 		System.out.print(iter.next()+" -> ");
+	 * 	
+	 */
 	@Override
 	public java.util.Iterator<T> iterator() {
 		return new LinkedListIterator();
 	}
 	
 	private class LinkedListIterator implements java.util.Iterator<T>{
-		private <T> current = head;
+		private Node <T> current = head;
 
 		@Override
 		public boolean hasNext(){
@@ -261,7 +270,7 @@ public class SinglyLinkedList<T> implements Iterable<T> {
 		public T next(){
 			T t = current.data;
 			current=current.next;
-			return e;
+			return t;
 		}
 
 		@Override
