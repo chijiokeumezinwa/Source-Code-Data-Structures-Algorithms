@@ -11,7 +11,7 @@ public class BinarySearchTree <T> extends Comparable<T> implements Iterable<T>{
 	private int nodeCount=0;
 
 	//tracks root node
-	private Node root=null;
+	private Node<T> root=null;
 
 	//internal node class
 	private static class Node<T>{
@@ -53,7 +53,7 @@ public class BinarySearchTree <T> extends Comparable<T> implements Iterable<T>{
 	private Node<T> add(Node<T> node, T elem){
 		//Base case: found a leaf node
 		if(node==null)
-			node=new Node(elem,null,null);
+			node=new Node<T>(elem,null,null);
 		else{
 			//pick a subtree to insert new element
 			if(elem.compareTo(node.data) < 0)
@@ -120,7 +120,7 @@ public class BinarySearchTree <T> extends Comparable<T> implements Iterable<T>{
         	//as far left as possible in the right subtree.
 			else{
 				//Find the leftmost node in the right subtree
-				Node tmp = findMin(node.right);
+				Node<T> tmp = findMin(node.right);
 
 				//Swap the data
 				node.data = tmp.data;
@@ -133,7 +133,7 @@ public class BinarySearchTree <T> extends Comparable<T> implements Iterable<T>{
 				//If instead we wanted to find the largest node in the left
 				//subtree as opposed to smallest node in the right subtree
 				//here is what we would do:
-				//Node tmp = findMax(node.left);
+				//Node<T> tmp = findMax(node.left);
 				//node.data = tmp.data;
 				//node.left = remove(node.left, tmp.data);
 			}
@@ -238,7 +238,7 @@ public class BinarySearchTree <T> extends Comparable<T> implements Iterable<T>{
 			if(expectedNodeCount != nodeCount)
 				throw new java.util.ConcurrentModificationException();
 
-			Node node = stack.pop();
+			Node<T> node = stack.pop();
 			if(node.right != null)
 				stack.push(node.right);
 			if(node.left != null)
@@ -265,7 +265,7 @@ public class BinarySearchTree <T> extends Comparable<T> implements Iterable<T>{
 		final java.util.Stack<Node> stack = new java.util.Stack<>();
 		stack.push(root);
 
-		Node trav = root;
+		Node<T> trav = root;
 
 		@Override
 		public boolean hasNext(){
@@ -285,7 +285,7 @@ public class BinarySearchTree <T> extends Comparable<T> implements Iterable<T>{
 				trav = trav.left;
 			}
 
-			Node node = stack.pop();
+			Node<T> node = stack.pop();
 
 			//Try moving down right once
 			if(node.right != null){
@@ -316,7 +316,7 @@ public class BinarySearchTree <T> extends Comparable<T> implements Iterable<T>{
 		stack1.push(root);
 
 		while(!stack1.isEmpty()){
-			Node node = stack1.pop();
+			Node<T> node = stack1.pop();
 			if(node != null){
 				stack2.push(node);
 				if(node.left != null)
@@ -363,7 +363,7 @@ public class BinarySearchTree <T> extends Comparable<T> implements Iterable<T>{
 		public T next() {
 			if (expectedNodeCount != nodeCount)
 				throw new java.util.ConcurrentModificationException();
-			Node node = queue.poll();
+			Node<T> node = queue.poll();
 			if (node.left != null)
 				queue.offer(node.left);
 			if (node.right != null)
