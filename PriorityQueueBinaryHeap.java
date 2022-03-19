@@ -75,7 +75,7 @@ public class PriorityQueueBinaryHeap<T extends Comparable<T>>{
 
 	public void add(T elem){
 		if(elem==null)
-			throw new IllegalArgumentExceptio();
+			throw new IllegalArgumentException();
 		heap.add(elem);
 
 		int indexOfLastElem = size() - 1;

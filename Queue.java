@@ -44,10 +44,10 @@ public class Queue<T> implements Iterable<T>{
         return list.peekFirst();
     }
 
-    public int search(Item elem){
+    public int search(T elem){
         return list.lastIndexOf(elem);
     }
-    
+
     // Return an iterator to alow the user to traverse
     // through the elements found inside the queue
 

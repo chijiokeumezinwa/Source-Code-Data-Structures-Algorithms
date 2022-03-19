@@ -47,7 +47,7 @@ public class Stack<T> implements Iterable<T>{
 	/**
 	 * How to use iterator? 
 	 * Stack < t > stack = ...;
-	 * Iterator< t > iter = list.iterator();
+	 * Iterator< t > iter = stack.iterator();
 	 * while(iter.hasNext())
 	 * 		System.out.println(iter.next());
 	 * 	
@@ -56,5 +56,5 @@ public class Stack<T> implements Iterable<T>{
 	public java.util.Iterator<T> iterator(){
 		return list.iterator();
 	}
-
 }
+

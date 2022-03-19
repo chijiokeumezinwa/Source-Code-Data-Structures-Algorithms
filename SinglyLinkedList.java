@@ -135,25 +135,27 @@ public class SinglyLinkedList<T> implements Iterable<T> {
 		}
 	}
 	
-	public T removeAt(int index){
+	public T removeAt(int index) {
 		if(index<0 || index>=size)
 			throw new IllegalArgumentException();
-		else if(index==0)
+		else if(index == 0)
 			return removeFirst();
-		else if(index==size-1)
+		else if(index == size-1)
 			return removeLast();
 		else{
+			
 			Node<T>previous = head;
 			for(int i =1; i< index; i++)
 				previous = previous.next;
 			Node<T> current = previous.next;
+			T data=current.data;
 			previous.next=current.next;
 			size--;
-			return current.data;
+			return data;
 		}
 	}
 
-	public int remove(Object obj){
+	public T remove(Object obj){
 		//see if obj is in list
 		if(!contains(obj))
 			throw new RuntimeException("Object not in list");
@@ -183,11 +185,11 @@ public class SinglyLinkedList<T> implements Iterable<T> {
 		return -1;
 	}
 
-	public boolean contains(T elem){
+	public boolean containsA(T elem){
 		return indexOf(elem) != -1;
 	}
 
-	public int indexOf(T elem){
+	public int indexOfA(T elem){
 		int index=0;
 		Node<T> trav =head;
 		for(;trav != null; trav=trav.next, index++){

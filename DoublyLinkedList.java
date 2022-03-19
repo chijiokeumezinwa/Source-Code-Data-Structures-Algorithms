@@ -158,13 +158,13 @@ public class DoublyLinkedList<T> implements Iterable<T> {
     if(isEmpty())
       throw new RuntimeException("Empty List");
     else if(size==1){
-      Node<Item> temp=head;
+      Node<T> temp=head;
       head=tail=null;
       size=0;
       return temp.data;
     }
     else{
-      Node<Item> temp=tail;
+      Node<T> temp=tail;
       tail=tail.prev;
       tail.next=null;
       return temp.data;
@@ -319,7 +319,7 @@ public class DoublyLinkedList<T> implements Iterable<T> {
     public T next(){
       T t = current.data;
       current=current.next;
-      return e;
+      return t;
     }
 
     @Override
