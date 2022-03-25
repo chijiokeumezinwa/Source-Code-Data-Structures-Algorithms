@@ -30,7 +30,7 @@ public class Entry<K,V>{
 	}
 }
 
-public class NewHashTableSeparateChaining<K,V> {
+public class NewHashTableSeparateChaining<K,V> implements Iterable<K>{
 	//defines the initial hash table size
 	private static final int DEFAULT_CAPACITY = 3;
 
@@ -105,8 +105,8 @@ public class NewHashTableSeparateChaining<K,V> {
 		for(int i = 0; i < capacity; i++){
 			//stop at an occupied index in array
 			if(table[i] != null){
-				//collect linked list from occupied index
-				//store in bucket
+				//the bucket is the specific linked list stored
+				//at an index in the hash table
 				LinkedList<Entry<K, V>> bucket = table[i];
 				//go through all elements of linked list
 				for(Entry<K, V> entry: bucket){
@@ -128,8 +128,8 @@ public class NewHashTableSeparateChaining<K,V> {
 		for(int i = 0; i < capacity; i++){
 			//find and stop at an occupied index in array
 			if(table[i] != null){
-				//collect linked list from occupied index
-				//store in bucket and store in set
+				//the bucket is the specific linked list stored
+				//at an index in the hash table
 				LinkedList<Entry<K, V>> bucket = table[i];
 				for(Entry<K, V> entry: bucket)
 					set.add(entry.getKey());
@@ -148,8 +148,8 @@ public class NewHashTableSeparateChaining<K,V> {
 		for(int i = 0; i < capacity; i++){
 			//find and stop at an occupied index in array
 			if (table[i] != null){
-				//collect linked list from occupied index
-				//store in bucket
+				//the bucket is the specific linked list stored
+				//at an index in the hash table
 				LinkedList<Entry<K, V>> bucket = table[i];
 				//go through all elements of bucket and add it to set
 				for(Entry<K, V> entry: bucket)
@@ -165,6 +165,8 @@ public class NewHashTableSeparateChaining<K,V> {
 
 		for (int i = 0; i < capacity; i++){
 			if (table[i] != null){
+				//the bucket is the specific linked list stored
+				//at an index in the hash table
 				LinkedList<Entry<K, V>> bucket = table[i];
 				for (Entry<K, V> entry: bucket)
 					set.add(entry.getValue());
@@ -176,9 +178,12 @@ public class NewHashTableSeparateChaining<K,V> {
 	//Return the value that matches the specified key
 	public V get(K key){
 		//find the index
+		//hashcode is a method from the object class
 		int bucketIndex = hash(key.hashCode());
 		//find the index and store it in bucket
 		if(table[bucketIndex] != null){
+			//the bucket is the specific linked list stored
+			//at an index in the hash table
 			LinkedList<Entry<K, V>> bucket = table[bucketIndex];
 			//go through all elements of bucket and see if it matches the key
 			for(Entry<K, V> entry: bucket){
@@ -197,7 +202,8 @@ public class NewHashTableSeparateChaining<K,V> {
 			//collect the index where key is
 			int bucketIndex = hash(key.hashCode());
 
-			//collect the linked list stored at index in bucket
+			//the bucket is the specific linked list stored
+			//at an index in the hash table
 			LinkedList<Entry<K, V>> bucket = table[bucketIndex];
 
 			//go through bucket
@@ -241,6 +247,8 @@ public class NewHashTableSeparateChaining<K,V> {
 
 		//Remove the first entry that matches the key from a bucket
 		if(table[bucketIndex] != null){
+			//the bucket is the specific linked list stored
+			//at an index in the hash table
 			LinkedList<Entry<K, V>> bucket = table[bucketIndex];
 			for(Entry<K, V> entry: bucket){
 				if (entry.getKey().equals(key)){
@@ -301,6 +309,49 @@ public class NewHashTableSeparateChaining<K,V> {
 		}
 	}
 
+	//Return an iterator to iterate over all the keys in this map
+	@Override
+	public java.util.Iterator<K> iterator(){
+		final int elementCount = size();
+
+		return new java.util.Iterator<K>(){
+			int bucketIndex = 0;
+			java.util.Iterator<Entry<K, V>> bucketIter = (table[0] == null) ? null : table[0].iterator();
+
+			@Override
+			public boolean hasNext(){
+  				//An item was added or removed while iterating
+				if (elementCount != size)
+					throw new java.util.ConcurrentModificationException();
+  				//No iterator or the current iterator is empty
+				if (bucketIter == null || !bucketIter.hasNext()){
+  					//Search next buckets until a valid iterator is found
+					while (++bucketIndex < capacity){
+						if(table[bucketIndex] != null){
+  							//Make sure this iterator actually has elements
+							java.util.Iterator<Entry<K, V>> nextIter = table[bucketIndex].iterator();
+							if (nextIter.hasNext()){
+								bucketIter = nextIter;
+								break;
+							}
+						}
+					}
+				}
+				return bucketIndex < capacity;
+			}
+
+			@Override
+			public K next(){
+				return bucketIter.next().key;
+			}
+
+			@Override
+			public void remove(){
+				throw new UnsupportedOperationException();
+			}
+		};
+
+	}
 
 	@Override
 	public String toString(){

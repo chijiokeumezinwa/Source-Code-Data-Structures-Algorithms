@@ -36,6 +36,8 @@ public class Entry<K, V>{
 
 @SuppressWarnings("unchecked")
 public class HashTableSeparateChaining<K, V> implements Iterable<K>{
+	//defines the max hash table size. 1 << 30 is same as 2^30
+	private static final int MAXIMUM_CAPACITY = 1 << 30;
 	private static final int DEFAULT_CAPACITY = 3;
 	private static final double DEFAULT_LOAD_FACTOR = 0.75;
 
@@ -54,7 +56,7 @@ public class HashTableSeparateChaining<K, V> implements Iterable<K>{
 	// Designated constructor
 	public HashTableSeparateChaining(int capacity, double maxLoadFactor){
 		//looks at capacity
-		if (capacity < 0)
+		if (capacity < 0 || capacity > MAXIMUM_CAPACITY)
 			throw new IllegalArgumentException("Illegal capacity");
 
 		//NaN-Not a number
@@ -75,7 +77,7 @@ public class HashTableSeparateChaining<K, V> implements Iterable<K>{
 
 	//Returns true/false depending on whether the hash-table is empty
 	public boolean isEmpty(){
-		return size == 0;
+		return size() == 0;
 	}
 
 	//Converts a hash value to an index. Essentially, this strips the
@@ -140,20 +142,6 @@ public class HashTableSeparateChaining<K, V> implements Iterable<K>{
     	return bucketRemoveEntry(bucketIndex, key);
   	}
 
-  	//Removes an entry from a given bucket if it exists
-  	private V bucketRemoveEntry(int bucketIndex, K key){
-  		Entry<K, V> entry = bucketSeekEntry(bucketIndex, key);
-
-  		if(entry != null){
-  			LinkedList<Entry<K, V>> links = table[bucketIndex];
-  			links.remove(entry);
-  			--size;
-  			return entry.value;
-  		}
-  		else
-  			return null;
-  	}
-
   	//Inserts an entry in a given bucket only if the entry does not already
   	//exist in the given bucket, but if it does then update the entry value
   	private V bucketInsertEntry(int bucketIndex, Entry<K, V> entry){
@@ -192,6 +180,20 @@ public class HashTableSeparateChaining<K, V> implements Iterable<K>{
   				return entry;
 
   		return null;
+  	}
+
+  	//Removes an entry from a given bucket if it exists
+  	private V bucketRemoveEntry(int bucketIndex, K key){
+  		Entry<K, V> entry = bucketSeekEntry(bucketIndex, key);
+  		
+  		if(entry != null){
+  			LinkedList<Entry<K, V>> links = table[bucketIndex];
+  			links.remove(entry);
+  			--size;
+  			return entry.value;
+  		}
+  		else
+  			return null;
   	}
 
   	//Resizes the internal table holding buckets of entries
