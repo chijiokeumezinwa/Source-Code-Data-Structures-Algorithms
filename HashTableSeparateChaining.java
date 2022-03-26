@@ -41,7 +41,7 @@ public class HashTableSeparateChaining<K, V> implements Iterable<K>{
 	private static final int DEFAULT_CAPACITY = 3;
 	private static final double DEFAULT_LOAD_FACTOR = 0.75;
 
-	private double maxLoadFactor;
+	private double newLoadFactor;
 	private int capacity, threshold, size = 0;
 	private LinkedList<Entry<K, V>>[] table;
 
@@ -54,19 +54,19 @@ public class HashTableSeparateChaining<K, V> implements Iterable<K>{
 	}
 
 	// Designated constructor
-	public HashTableSeparateChaining(int capacity, double maxLoadFactor){
+	public HashTableSeparateChaining(int capacity, double newLoadFactor){
 		//looks at capacity
 		if (capacity < 0 || capacity > MAXIMUM_CAPACITY)
 			throw new IllegalArgumentException("Illegal capacity");
 
 		//NaN-Not a number
-		//looks at maxLoadFactor  
-		if (maxLoadFactor <= 0 || Double.isNaN(maxLoadFactor) || Double.isInfinite(maxLoadFactor))
-			throw new IllegalArgumentException("Illegal maxLoadFactor");
+		//looks at newLoadFactor  
+		if (newLoadFactor <= 0 || Double.isNaN(newLoadFactor) || Double.isInfinite(newLoadFactor))
+			throw new IllegalArgumentException("Illegal newLoadFactor");
 
-		this.maxLoadFactor = maxLoadFactor;
+		this.newLoadFactor = newLoadFactor;
 		this.capacity = Math.max(DEFAULT_CAPACITY, capacity);
-		threshold = (int) (this.capacity * maxLoadFactor);
+		threshold = (int) (this.capacity * newLoadFactor);
 		table = new LinkedList[this.capacity];
 	}
 
@@ -142,6 +142,23 @@ public class HashTableSeparateChaining<K, V> implements Iterable<K>{
     	return bucketRemoveEntry(bucketIndex, key);
   	}
 
+  	//Finds and returns a particular entry in a given bucket if it exists, returns null otherwise
+  	private Entry<K, V> bucketSeekEntry(int bucketIndex, K key){
+  		if(key == null)
+  			return null;
+  		
+  		LinkedList<Entry<K, V>> bucket = table[bucketIndex];
+
+  		if (bucket == null)
+  			return null;
+
+  		for (Entry<K, V> entry : bucket)
+  			if (entry.key.equals(key))
+  				return entry;
+
+  		return null;
+  	}
+
   	//Inserts an entry in a given bucket only if the entry does not already
   	//exist in the given bucket, but if it does then update the entry value
   	private V bucketInsertEntry(int bucketIndex, Entry<K, V> entry){
@@ -165,23 +182,6 @@ public class HashTableSeparateChaining<K, V> implements Iterable<K>{
   		}
   	}
 
-  	//Finds and returns a particular entry in a given bucket if it exists, returns null otherwise
-  	private Entry<K, V> bucketSeekEntry(int bucketIndex, K key){
-  		if(key == null)
-  			return null;
-
-  		LinkedList<Entry<K, V>> bucket = table[bucketIndex];
-
-  		if (bucket == null)
-  			return null;
-
-  		for (Entry<K, V> entry : bucket)
-  			if (entry.key.equals(key))
-  				return entry;
-
-  		return null;
-  	}
-
   	//Removes an entry from a given bucket if it exists
   	private V bucketRemoveEntry(int bucketIndex, K key){
   		Entry<K, V> entry = bucketSeekEntry(bucketIndex, key);
@@ -199,7 +199,7 @@ public class HashTableSeparateChaining<K, V> implements Iterable<K>{
   	//Resizes the internal table holding buckets of entries
   	private void resizeTable(){
   		capacity *= 2;
-  		threshold = (int) (capacity * maxLoadFactor);
+  		threshold = (int) (capacity * newLoadFactor);
 
   		LinkedList<Entry<K, V>>[] newTable = new LinkedList[capacity];
 
