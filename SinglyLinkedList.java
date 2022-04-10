@@ -155,41 +155,18 @@ public class SinglyLinkedList<T> implements Iterable<T> {
 		}
 	}
 
-	public T remove(Object obj){
-		//see if obj is in list
-		if(!contains(obj))
-			throw new RuntimeException("Object not in list");
-		int index=indexOf(obj);
-		return removeAt(index);	
+	public T remove(T elem){
+		if(!contains(elem))
+			throw new RuntimeException("Element not in list");
+		int index=indexOf(elem);
+		return removeAt(index);
 	}
 
-	public boolean contains(Object obj){
-		return indexOf(obj) != -1;
-	}
-
-	public int indexOf(Object obj){
-		int index=0;
-		Node<T> trav = head;
-		if(obj == null){
-			for(;trav != null; trav=trav.next, index++){
-				if(trav.data==null)
-					return index;
-			}
-		}
-		else{
-			for(;trav != null; trav=trav.next, index++){
-				if(obj.equals(trav.data))
-					return index;
-			}
-		}
-		return -1;
-	}
-
-	public boolean containsA(T elem){
+	public boolean contains(T elem){
 		return indexOf(elem) != -1;
 	}
 
-	public int indexOfA(T elem){
+	public int indexOf(T elem){
 		int index=0;
 		Node<T> trav =head;
 		for(;trav != null; trav=trav.next, index++){
@@ -229,6 +206,11 @@ public class SinglyLinkedList<T> implements Iterable<T> {
 	public T set(int index, T elem){
 		if(index < 0 || index >= size)
 			throw new IllegalArgumentException();
+		
+		//check to see if list is empty
+		else if(isEmpty())
+			throw new RuntimeException("Empty List");
+
 		else if(index == 0){
 			T remove = removeFirst();
 			addFirst(elem);
